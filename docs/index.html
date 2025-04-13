@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-100">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fitnes App</title>
+  <link href="style.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="h-full flex flex-col">
+  <!-- Tabs nav -->
+  <nav class="flex justify-around bg-white border-t border-gray-300 fixed bottom-0 w-full z-10">
+    <button class="tab-btn flex-1 p-4 text-center hover:bg-gray-100" data-tab="workout">🏋️ Workout</button>
+    <button class="tab-btn flex-1 p-4 text-center hover:bg-gray-100" data-tab="meal">🍽️ Meal</button>
+    <button class="tab-btn flex-1 p-4 text-center hover:bg-gray-100" data-tab="report">📈 Report</button>
+    <button class="tab-btn flex-1 p-4 text-center hover:bg-gray-100" data-tab="account">👤 Account</button>
+    <!-- New Meal tab -->
+  </nav>
+
+  <!-- Content -->
+  <main class="flex-1 overflow-y-auto p-4 pb-20">
+
+    <!-- Workout Tab -->
+    <section id="workout" class="tab-content">
+      <h2 class="text-2xl font-bold mb-4">Workout Plan</h2>
+
+      <!-- Workout Days Tabs -->
+      <div class="flex space-x-2 mb-4">
+        <button class="day-tab bg-blue-100 text-blue-700 px-3 py-1 rounded" id="day1Btn">Day 1</button>
+        <button class="day-tab bg-gray-200 px-3 py-1 rounded hidden" id="day2Btn">Day 2</button>
+        <button class="day-tab bg-gray-200 px-3 py-1 rounded hidden" id="day3Btn">Day 3</button>
+        <button class="day-tab bg-gray-200 px-3 py-1 rounded hidden" id="day4Btn">Day 4</button>
+        <button id="addDayBtn" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">+ Add Day</button>
+      </div>
+
+      <!-- Workouts for each day -->
+      <div class="day-content space-y-4 ">
+        <div id="deadliftExercise" class="bg-white p-4 rounded shadow cursor-pointer">
+          <div class="flex items-center space-x-4">
+            <img
+              src="https://www.kettlebellkings.com/cdn/shop/articles/barbell-deadlift-movement.gif?v=1692228918&width=1000"
+              class="w-20 h-20 rounded" />
+            <div>
+              <h3 class="font-bold text-lg">Deadlift</h3>
+              <p class="text-sm text-gray-600">3 sets × 15 reps</p>
+              <p class="text-xs text-gray-500">Rest: 30s</p>
+            </div>
+          </div>
+        </div>
+        <div id="inclineExercise" class="bg-white p-4 rounded shadow hidden cursor-pointer">
+          <div class="flex items-center space-x-4">
+            <img src="https://cdn.shopify.com/s/files/1/0645/8762/8770/files/Incline_Dumbbell_Curls.gif?v=1743146551"
+              class="w-20 h-20 rounded" />
+            <div>
+              <h3 class="font-bold text-lg">Incline Dumbbell Curls</h3>
+              <p class="text-sm text-gray-600">3 sets × 10 reps</p>
+              <p class="text-xs text-gray-500">Rest: 30s</p>
+            </div>
+          </div>
+        </div>
+        <div id="lastExercise" class="bg-white p-4 rounded shadow hidden cursor-pointer">
+          <div class="flex items-center space-x-4">
+            <img
+              src="https://cdn.shopify.com/s/files/1/0645/8762/8770/files/Kettlebell-Chest-Press-on-the-Floor_480x480.gif?v=1732870373"
+              class="w-20 h-20 rounded" />
+            <div>
+              <h3 class="font-bold text-lg">Kettlebell Floor Press</h3>
+              <p class="text-sm text-gray-600">3 sets × 10 reps</p>
+              <p class="text-xs text-gray-500">Rest: 30s</p>
+            </div>
+          </div>
+        </div>
+        <button id="addExerciseBtn" class="w-full mb-4 bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Add
+          Exercise</button>
+        <button id="startWorkoutBtn" class="w-full mt-4 bg-green-600 text-white py-2 rounded hover:bg-green-700">Start
+          Workout</button>
+      </div>
+
+      <!-- Modal -->
+      <div id="workoutModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-6 rounded-lg w-11/12 max-w-xl">
+          <button id="closeModal" class="absolute top-2 right-2 text-gray-700 font-bold">X</button>
+          <div class="flex flex-col items-center space-y-4">
+            <img id="modalGif"
+              src="https://www.kettlebellkings.com/cdn/shop/articles/barbell-deadlift-movement.gif?v=1692228918&width=1000"
+              class="w-40 h-40 rounded" />
+            <h3 class="text-xl font-bold">Deadlift</h3>
+            <p class="text-sm text-gray-600">3 sets × 15 reps</p>
+            <p class="text-xs text-gray-500">Rest: 30s</p>
+            <p class="text-xs text-gray-500">The deadlift is a strengthening exercise where a loaded barbell is lifted
+              off the ground from a stabilised, bent over position, knees free to bend. It is one of the three canonical
+              powerlifting exercises, along with the squat and bench press.</p>
+
+            <!-- Input fields for each set -->
+            <div id="inputFields">
+              <div class="flex space-x-4">
+                <div>
+                  <label class="block text-sm font-medium">Last</label>
+                  <p class="text-sm text-gray-600"> 15 reps x 90 kg</p>
+                </div>
+                <div>
+                  <label for="reps1" class="block text-sm font-medium">Reps</label>
+                  <input id="reps1" type="number" value="14" class="w-16 p-2 border rounded" />
+                </div>
+                <div>
+                  <label for="weight1" class="block text-sm font-medium">Weight</label>
+                  <input id="weight1" type="number" value="100" class="w-16 p-2 border rounded" />
+                </div>
+              </div>
+              <div class="flex space-x-4 mt-2">
+                <div>
+                  <p class="text-sm text-gray-600"> 15 reps x 80 kg</p>
+                </div>
+                <div>
+                  <input id="reps2" type="number" value="16" class="w-16 p-2 border rounded" />
+                </div>
+                <div>
+                  <input id="weight2" type="number" value="100" class="w-16 p-2 border rounded" />
+                </div>
+              </div>
+              <div class="flex space-x-4 mt-2">
+                <div>
+                  <p class="text-sm text-gray-600"> 15 reps x 75 kg</p>
+                </div>
+                <div>
+                  <input id="reps3" type="number" value="15" class="w-16 p-2 border rounded" />
+                </div>
+                <div>
+                  <input id="weight3" type="number" value="100" class="w-16 p-2 border rounded" />
+                </div>
+              </div>
+            </div>
+
+            <button id="submitWorkout"
+              class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Report Tab -->
+    <section id="report" class="tab-content hidden">
+      <h2 class="text-2xl font-bold mb-4">Daily Report</h2>
+
+      <!-- Progress -->
+      <div class="mb-4">
+        <label class="text-sm font-medium">Completion</label>
+        <div class="w-full bg-gray-200 rounded-full h-3">
+          <div id="progress-bar" class="bg-blue-600 h-3 rounded-full" style="width: 0%"></div>
+        </div>
+      </div>
+
+      <form class="space-y-4 report-form">
+        <div>
+          <label class="block text-sm font-medium">Energy Level</label>
+          <select class="w-full p-2 border rounded" required>
+            <option value="">-- Select --</option>
+            <option>High</option>
+            <option>Medium</option>
+            <option>Low</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Focus Level (1–10)</label>
+          <input type="range" min="1" max="10" class="w-full" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Muscle Soreness (1–10)</label>
+          <input type="range" min="1" max="10" class="w-full" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Sleep Quality</label>
+          <select class="w-full p-2 border rounded" required>
+            <option value="">-- Select --</option>
+            <option>Excellent</option>
+            <option>Good</option>
+            <option>Poor</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Notes</label>
+          <textarea class="w-full p-2 border rounded" rows="3"></textarea>
+        </div>
+        <button id="openReportModal" type="button"
+          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Submit</button>
+      </form>
+
+      <!-- Modal -->
+      <div id="reportModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-6 rounded-lg w-11/12 max-w-xl">
+          <button id="closeModal" class="absolute top-2 right-2 text-gray-700 font-bold">X</button>
+          <div class="flex flex-col items-center space-y-4">
+            <h3 class="text-xl font-bold">Info</h3>
+            <p class="text-xs text-gray-600">Dropbox dokument je azuriran</p>
+          </div>
+
+          <button id="reportModalClose"
+            class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Close</button>
+        </div>
+      </div>
+      </div>
+    </section>
+
+    <!-- Meal Tab -->
+    <section id="meal" class="tab-content hidden">
+      <h2 class="text-2xl font-bold mb-4">Meal Plan</h2>
+
+      <!-- Dani kada se vežba -->
+      <h3 class="text-lg font-bold mb-2">Dani kada se vežba</h3>
+
+      <!-- Tabela za obroke -->
+      <div class="overflow-x-auto bg-white rounded shadow">
+        <table class="min-w-full table-auto border-collapse border border-gray-300">
+          <thead class="bg-gray-100">
+            <tr>
+              <th class="border border-gray-300 px-4 py-2 text-left font-medium text-gray-700">Namirnica</th>
+              <th class="border border-gray-300 px-4 py-2 text-left font-medium text-gray-700">Količina (g)</th>
+              <th class="border border-gray-300 px-4 py-2 text-left font-medium text-gray-700">Protein</th>
+              <th class="border border-gray-300 px-4 py-2 text-left font-medium text-gray-700">Ugljeni hidrati</th>
+              <th class="border border-gray-300 px-4 py-2 text-left font-medium text-gray-700">Masti</th>
+              <th class="border border-gray-300 px-4 py-2 text-left font-medium text-gray-700">Kcal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dorucak -->
+            <tr class="bg-gray-50">
+              <td colspan="6" class="border border-gray-300 px-4 py-2 font-bold">07:00 Doručak (vit C iceberg, Omega3)
+              </td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Jaja</td>
+              <td class="border border-gray-300 px-4 py-2">150</td>
+              <td class="border border-gray-300 px-4 py-2">18.87</td>
+              <td class="border border-gray-300 px-4 py-2">1.155</td>
+              <td class="border border-gray-300 px-4 py-2">14.91</td>
+              <td class="border border-gray-300 px-4 py-2">220.5</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Spanać</td>
+              <td class="border border-gray-300 px-4 py-2">100</td>
+              <td class="border border-gray-300 px-4 py-2">2.9</td>
+              <td class="border border-gray-300 px-4 py-2">3.6</td>
+              <td class="border border-gray-300 px-4 py-2">0.4</td>
+              <td class="border border-gray-300 px-4 py-2">23</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Ćureća prsa</td>
+              <td class="border border-gray-300 px-4 py-2">20</td>
+              <td class="border border-gray-300 px-4 py-2">3.6</td>
+              <td class="border border-gray-300 px-4 py-2">0</td>
+              <td class="border border-gray-300 px-4 py-2">0.24</td>
+              <td class="border border-gray-300 px-4 py-2">17.4</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Skyr</td>
+              <td class="border border-gray-300 px-4 py-2">100</td>
+              <td class="border border-gray-300 px-4 py-2">11</td>
+              <td class="border border-gray-300 px-4 py-2">4</td>
+              <td class="border border-gray-300 px-4 py-2">0.2</td>
+              <td class="border border-gray-300 px-4 py-2">62</td>
+            </tr>
+
+            <!-- Uzina -->
+            <tr class="bg-gray-50">
+              <td colspan="6" class="border border-gray-300 px-4 py-2 font-bold">11:00 Užina (D vit 3000iu)</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Tunjevina</td>
+              <td class="border border-gray-300 px-4 py-2">200</td>
+              <td class="border border-gray-300 px-4 py-2">46.6</td>
+              <td class="border border-gray-300 px-4 py-2">0</td>
+              <td class="border border-gray-300 px-4 py-2">9.8</td>
+              <td class="border border-gray-300 px-4 py-2">288</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Badem</td>
+              <td class="border border-gray-300 px-4 py-2">20</td>
+              <td class="border border-gray-300 px-4 py-2">4.24</td>
+              <td class="border border-gray-300 px-4 py-2">4.32</td>
+              <td class="border border-gray-300 px-4 py-2">9.98</td>
+              <td class="border border-gray-300 px-4 py-2">115.8</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Feta sir</td>
+              <td class="border border-gray-300 px-4 py-2">40</td>
+              <td class="border border-gray-300 px-4 py-2">5.6</td>
+              <td class="border border-gray-300 px-4 py-2">1.64</td>
+              <td class="border border-gray-300 px-4 py-2">8.4</td>
+              <td class="border border-gray-300 px-4 py-2">105.6</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Čeri paradajz</td>
+              <td class="border border-gray-300 px-4 py-2">70</td>
+              <td class="border border-gray-300 px-4 py-2">1.05</td>
+              <td class="border border-gray-300 px-4 py-2">3.08</td>
+              <td class="border border-gray-300 px-4 py-2">0.21</td>
+              <td class="border border-gray-300 px-4 py-2">14.7</td>
+            </tr>
+
+            <!-- rucak -->
+            <tr class="bg-gray-50">
+              <td colspan="6" class="border border-gray-300 px-4 py-2 font-bold">15:00 Rucak</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Integralna tortilja</td>
+              <td class="border border-gray-300 px-4 py-2">200</td>
+              <td class="border border-gray-300 px-4 py-2">46.6</td>
+              <td class="border border-gray-300 px-4 py-2">0</td>
+              <td class="border border-gray-300 px-4 py-2">9.8</td>
+              <td class="border border-gray-300 px-4 py-2">288</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Junetina </td>
+              <td class="border border-gray-300 px-4 py-2">20</td>
+              <td class="border border-gray-300 px-4 py-2">4.24</td>
+              <td class="border border-gray-300 px-4 py-2">4.32</td>
+              <td class="border border-gray-300 px-4 py-2">9.98</td>
+              <td class="border border-gray-300 px-4 py-2">115.8</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Zelena salata</td>
+              <td class="border border-gray-300 px-4 py-2">40</td>
+              <td class="border border-gray-300 px-4 py-2">5.6</td>
+              <td class="border border-gray-300 px-4 py-2">1.64</td>
+              <td class="border border-gray-300 px-4 py-2">8.4</td>
+              <td class="border border-gray-300 px-4 py-2">105.6</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Krastavac</td>
+              <td class="border border-gray-300 px-4 py-2">70</td>
+              <td class="border border-gray-300 px-4 py-2">1.05</td>
+              <td class="border border-gray-300 px-4 py-2">3.08</td>
+              <td class="border border-gray-300 px-4 py-2">0.21</td>
+              <td class="border border-gray-300 px-4 py-2">14.7</td>
+            </tr>
+
+            <!-- uzina -->
+            <tr class="bg-gray-50">
+              <td colspan="6" class="border border-gray-300 px-4 py-2 font-bold">17:30 Pre treninga (zeleni caj)</td>
+            </tr>
+
+            <!-- uzina -->
+            <tr class="bg-gray-50">
+              <td colspan="6" class="border border-gray-300 px-4 py-2 font-bold">19:30 Uzina</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">whey </td>
+              <td class="border border-gray-300 px-4 py-2">200</td>
+              <td class="border border-gray-300 px-4 py-2">46.6</td>
+              <td class="border border-gray-300 px-4 py-2">0</td>
+              <td class="border border-gray-300 px-4 py-2">9.8</td>
+              <td class="border border-gray-300 px-4 py-2">288</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Ovsene pahuljice </td>
+              <td class="border border-gray-300 px-4 py-2">20</td>
+              <td class="border border-gray-300 px-4 py-2">4.24</td>
+              <td class="border border-gray-300 px-4 py-2">4.32</td>
+              <td class="border border-gray-300 px-4 py-2">9.98</td>
+              <td class="border border-gray-300 px-4 py-2">115.8</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Visnja </td>
+              <td class="border border-gray-300 px-4 py-2">40</td>
+              <td class="border border-gray-300 px-4 py-2">5.6</td>
+              <td class="border border-gray-300 px-4 py-2">1.64</td>
+              <td class="border border-gray-300 px-4 py-2">8.4</td>
+              <td class="border border-gray-300 px-4 py-2">105.6</td>
+            </tr>
+
+            <!-- vecera -->
+            <tr class="bg-gray-50">
+              <td colspan="6" class="border border-gray-300 px-4 py-2 font-bold">20:30 Vecera (ZMA)</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Pileće belo meso</td>
+              <td class="border border-gray-300 px-4 py-2">200</td>
+              <td class="border border-gray-300 px-4 py-2">46.6</td>
+              <td class="border border-gray-300 px-4 py-2">0</td>
+              <td class="border border-gray-300 px-4 py-2">9.8</td>
+              <td class="border border-gray-300 px-4 py-2">288</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Kuvani kukuruz </td>
+              <td class="border border-gray-300 px-4 py-2">20</td>
+              <td class="border border-gray-300 px-4 py-2">4.24</td>
+              <td class="border border-gray-300 px-4 py-2">4.32</td>
+              <td class="border border-gray-300 px-4 py-2">9.98</td>
+              <td class="border border-gray-300 px-4 py-2">115.8</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Zelena salata</td>
+              <td class="border border-gray-300 px-4 py-2">40</td>
+              <td class="border border-gray-300 px-4 py-2">5.6</td>
+              <td class="border border-gray-300 px-4 py-2">1.64</td>
+              <td class="border border-gray-300 px-4 py-2">8.4</td>
+              <td class="border border-gray-300 px-4 py-2">105.6</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-4 py-2">Kupus</td>
+              <td class="border border-gray-300 px-4 py-2">70</td>
+              <td class="border border-gray-300 px-4 py-2">1.05</td>
+              <td class="border border-gray-300 px-4 py-2">3.08</td>
+              <td class="border border-gray-300 px-4 py-2">0.21</td>
+              <td class="border border-gray-300 px-4 py-2">14.7</td>
+            </tr>
+
+
+            <!-- Dodaj ostale obroke na sličan način -->
+          </tbody>
+          <tfoot class="bg-gray-100">
+            <tr>
+              <td colspan="5" class="border border-gray-300 px-4 py-2 font-bold text-right">Ukupno</td>
+              <td class="border border-gray-300 px-4 py-2 font-bold">2468.7</td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- Account Tab -->
+    <section id="account" class="tab-content hidden">
+      <h2 class="text-2xl font-bold mb-4">Account</h2>
+      <div class="bg-white p-4 rounded-lg shadow space-y-2">
+        <p><strong>Name:</strong> John Doe</p>
+        <p><strong>Email:</strong> john@example.com</p>
+        <p><strong>Membership:</strong> Premium</p>
+        <button class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Dropbox File</button>
+        <button class="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Logout</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Tab switching
+    const buttons = document.querySelectorAll('.tab-btn');
+    const tabs = document.querySelectorAll('.tab-content');
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Remove 'active' classes from all buttons
+        buttons.forEach(btn => btn.classList.remove('bg-gray-100', 'text-blue-700'));
+        button.classList.add('bg-gray-100', 'text-blue-700'); // Add active class to clicked tab
+
+        const target = button.dataset.tab;
+        tabs.forEach(tab => {
+          tab.classList.toggle('hidden', tab.id !== target);
+        });
+      });
+    });
+
+    // Day tabs
+    const dayTabs = document.querySelectorAll('.day-tab');
+    const dayContents = document.querySelectorAll('.day-content');
+    dayTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        dayTabs.forEach(t => t.classList.remove('bg-blue-100', 'text-blue-700'));
+        tab.classList.add('bg-blue-100', 'text-blue-700');
+      });
+    });
+
+    // Report progress
+    const form = document.querySelector('.report-form');
+    const progress = document.getElementById('progress-bar');
+    form.addEventListener('input', () => {
+      const fields = form.querySelectorAll('select, input, textarea');
+      let filled = 0;
+      fields.forEach(f => {
+        if ((f.type === 'range' && f.value !== '') || (f.type !== 'range' && f.value.trim() !== '')) {
+          filled++;
+        }
+      });
+      const percent = (filled / fields.length) * 100;
+      progress.style.width = `${percent}%`;
+    });
+
+    // Open modal when "Start Workout" button is clicked
+    const startWorkoutBtn = document.getElementById('startWorkoutBtn');
+    const workoutModal = document.getElementById('workoutModal');
+    const closeModal = document.getElementById('closeModal');
+
+    startWorkoutBtn.addEventListener('click', () => {
+      workoutModal.classList.remove('hidden'); // Show modal
+    });
+
+    // Close modal when "X" is clicked
+    closeModal.addEventListener('click', () => {
+      workoutModal.classList.add('hidden'); // Hide modal
+    });
+
+    // Open modal when "Start Workout" button is clicked
+    const openReportModal = document.getElementById('openReportModal');
+    const reportModal = document.getElementById('reportModal');
+    const reportModalClose = document.getElementById('reportModalClose');
+
+    openReportModal.addEventListener('click', () => {
+      reportModal.classList.remove('hidden'); // Show modal
+    });
+
+    // Close modal when "X" is clicked
+    reportModalClose.addEventListener('click', () => {
+      reportModal.classList.add('hidden'); // Hide modal
+    });
+
+    // Optional: Add functionality for form submission (save input values, etc.)
+    const submitWorkout = document.getElementById('submitWorkout');
+    submitWorkout.addEventListener('click', () => {
+      const reps1 = document.getElementById('reps1').value;
+      const weight1 = document.getElementById('weight1').value;
+      const reps2 = document.getElementById('reps2').value;
+      const weight2 = document.getElementById('weight2').value;
+      const reps3 = document.getElementById('reps3').value;
+      const weight3 = document.getElementById('weight3').value;
+
+      // Here, you could process the data (e.g., save it to local storage, submit it to a server, etc.)
+      console.log(`Set 1: ${reps1} reps, ${weight1}kg`);
+      console.log(`Set 2: ${reps2} reps, ${weight2}kg`);
+      console.log(`Set 3: ${reps3} reps, ${weight3}kg`);
+
+      // Hide modal after submission
+      workoutModal.classList.add('hidden');
+    });
+
+    // Dugme "Add Exercise"
+    const addExerciseBtn = document.getElementById('addExerciseBtn');
+    const lastExercise = document.getElementById('lastExercise');
+
+    addExerciseBtn.addEventListener('click', () => {
+      // lastExercise.classList.remove('hidden'); // Prikazujemo poslednju vežbu
+      // addExerciseBtn.classList.add('hidden'); // Sakrivamo dugme "Add Exercise"
+
+      if (inclineExercise.classList.contains('hidden')) {
+        inclineExercise.classList.remove('hidden'); // Prikazujemo Day 3
+      } else if (lastExercise.classList.contains('hidden')) {
+        lastExercise.classList.remove('hidden'); // Prikazujemo Day 3
+      } 
+    });
+
+    // Dugme "Add Day"
+    const addDayBtn = document.getElementById('addDayBtn');
+    const day2Btn = document.getElementById('day2Btn');
+    const day3Btn = document.getElementById('day3Btn');
+    const day4Btn = document.getElementById('day4Btn');
+
+    addDayBtn.addEventListener('click', () => {
+      if (day2Btn.classList.contains('hidden')) {
+        day2Btn.classList.remove('hidden'); // Prikazujemo Day 3
+      } else if (day3Btn.classList.contains('hidden')) {
+        day3Btn.classList.remove('hidden'); // Prikazujemo Day 3
+      } else if (day4Btn.classList.contains('hidden')) {
+        day4Btn.classList.remove('hidden'); // Prikazujemo Day 4
+        // addDayBtn.classList.add('hidden'); // Sakrivamo dugme "Add Day" kada su svi dani prikazani
+      }
+    });
+
+    // Otvaranje modala kada se klikne na Deadlift
+    const deadliftExercise = document.getElementById('deadliftExercise');
+
+    deadliftExercise.addEventListener('click', () => {
+      workoutModal.classList.remove('hidden'); // Prikazujemo modal
+    });
+    // Otvaranje modala kada se klikne na Deadlift
+    const inclineExercise = document.getElementById('inclineExercise');
+
+    inclineExercise.addEventListener('click', () => {
+      workoutModal.classList.remove('hidden'); // Prikazujemo modal
+    });
+  </script>
+</body>
+
+</html>
