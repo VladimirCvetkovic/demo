@@ -28,10 +28,10 @@
 
       <!-- Workout Days Tabs -->
       <div class="flex space-x-2 mb-4">
-        <button class="day-tab bg-blue-100 text-blue-700 px-3 py-1 rounded" data-day="day1">Day 1</button>
-        <button class="day-tab bg-gray-200 px-3 py-1 rounded hidden" data-day="day2" id="day2Btn">Day 2</button>
-        <button class="day-tab bg-gray-200 px-3 py-1 rounded hidden" data-day="day3" id="day3Btn">Day 3</button>
-        <button class="day-tab bg-gray-200 px-3 py-1 rounded hidden" data-day="day4" id="day4Btn">Day 4</button>
+        <button class="day-tab bg-blue-100 text-blue-700 px-3 py-1 rounded" id="day1Btn">Day 1</button>
+        <button class="day-tab bg-gray-200 px-3 py-1 rounded hidden" id="day2Btn">Day 2</button>
+        <button class="day-tab bg-gray-200 px-3 py-1 rounded hidden" id="day3Btn">Day 3</button>
+        <button class="day-tab bg-gray-200 px-3 py-1 rounded hidden" id="day4Btn">Day 4</button>
         <button id="addDayBtn" class="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700">+ Add Day</button>
       </div>
 
@@ -457,10 +457,6 @@
       tab.addEventListener('click', () => {
         dayTabs.forEach(t => t.classList.remove('bg-blue-100', 'text-blue-700'));
         tab.classList.add('bg-blue-100', 'text-blue-700');
-        const target = tab.dataset.day;
-        dayContents.forEach(day => {
-          day.classList.toggle('hidden', day.id !== target);
-        });
       });
     });
 
@@ -569,18 +565,6 @@
 
     inclineExercise.addEventListener('click', () => {
       workoutModal.classList.remove('hidden'); // Prikazujemo modal
-    });
-
-    // Prikaz sadržaja za Day 1
-    const day1Btn = document.querySelector('[data-day="day1"]');
-    const workoutTab = document.getElementById('workout');
-
-    day1Btn.addEventListener('click', () => {
-      // Sakrij sve tabove
-      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.add('hidden'));
-
-      // Prikaži Workout tab
-      workoutTab.classList.remove('hidden');
     });
   </script>
 </body>
