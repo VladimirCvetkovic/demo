@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="sr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col items-center p-6">
+  <!-- Top Menu -->
+  <div class="bg-blue-500 text-white w-full py-4 px-6 flex justify-between items-center fixed top-0 left-0 z-50">
+    <h1 class="text-lg font-bold">Users</h1>
+    <div class="flex items-center space-x-4">
+      <a href="admin.html" class="text-sm underline hover:text-gray-200">Back to Admin</a>
+    </div>
+  </div>
+
+  <!-- Content Wrapper -->
+  <div class="bg-white rounded-2xl shadow-lg w-full max-w-4xl mt-24 p-6">
+    <h2 class="text-xl font-bold mb-4 text-center">Korisnici</h2>
+    <table class="table-auto w-full border-collapse border border-gray-300">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="border border-gray-300 px-4 py-2">Ime i Prezime</th>
+          <th class="border border-gray-300 px-4 py-2">Selektovani termini</th>
+          <th class="border border-gray-300 px-4 py-2">Preostali termini</th>
+        </tr>
+      </thead>
+      <tbody id="users-table">
+        <!-- Dinamički generisani redovi -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white rounded-lg shadow-lg p-6 w-96">
+      <h2 id="modal-title" class="text-lg font-bold mb-4">Dodaj termine za korisnika</h2>
+      <input id="days-input" type="number" class="w-full border border-gray-300 rounded px-3 py-2 mb-4" placeholder="Unesite broj dana">
+      <div class="flex justify-end">
+        <button id="close-modal" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 mr-2">Zatvori</button>
+        <button id="save-days" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Sačuvaj</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Primer podataka o korisnicima
+    const users = [
+      { ime: "Marko", prezime: "Markovic", selektovaniDani: 12, preostaliDani: 0 },
+      { ime: "Ana", prezime: "Anic", selektovaniDani: 10, preostaliDani: 20 },
+      { ime: "Petar", prezime: "Petrovic", selektovaniDani: 15, preostaliDani: 15 }
+    ];
+
+    const usersTable = document.getElementById("users-table");
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modal-title");
+    const daysInput = document.getElementById("days-input");
+    const closeModal = document.getElementById("close-modal");
+    const saveDays = document.getElementById("save-days");
+
+    let selectedUserIndex = null;
+
+    // Popunjavanje tabele korisnicima
+    users.forEach((user, index) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td class="border border-gray-300 px-4 py-2 text-blue-500 cursor-pointer" data-index="${index}">
+          ${user.ime} ${user.prezime}
+        </td>
+        <td class="border border-gray-300 px-4 py-2">${user.selektovaniDani}</td>
+        <td class="border border-gray-300 px-4 py-2">${user.preostaliDani}</td>
+      `;
+      usersTable.appendChild(row);
+    });
+
+    // Dodavanje event listenera za otvaranje modala
+    usersTable.addEventListener("click", (e) => {
+      if (e.target.tagName === "TD" && e.target.dataset.index) {
+        selectedUserIndex = e.target.dataset.index;
+        const user = users[selectedUserIndex];
+        modalTitle.textContent = `Dodaj preostale dane za ${user.ime} ${user.prezime}`;
+        modal.classList.remove("hidden");
+        daysInput.value = user.preostaliDani;
+      }
+    });
+
+    // Zatvaranje modala
+    closeModal.addEventListener("click", () => {
+      modal.classList.add("hidden");
+    });
+
+    // Čuvanje preostalih dana
+    saveDays.addEventListener("click", () => {
+      if (selectedUserIndex !== null) {
+        users[selectedUserIndex].preostaliDani = parseInt(daysInput.value, 10) || 0;
+        usersTable.innerHTML = ""; // Resetovanje tabele
+        users.forEach((user, index) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="border border-gray-300 px-4 py-2 text-blue-500 cursor-pointer" data-index="${index}">
+              ${user.ime} ${user.prezime}
+            </td>
+            <td class="border border-gray-300 px-4 py-2">${user.selektovaniDani}</td>
+            <td class="border border-gray-300 px-4 py-2">${user.preostaliDani}</td>
+          `;
+          usersTable.appendChild(row);
+        });
+        modal.classList.add("hidden");
+      }
+    });
+  </script>
+</body>
+
+</html>

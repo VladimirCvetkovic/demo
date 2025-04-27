@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="sr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col items-center p-6" id="body">
+    <!-- Top Menu -->
+    <div class="bg-blue-500 text-white w-full py-4 px-6 flex justify-between items-center fixed top-0 left-0 z-50">
+        <h1 class="text-lg font-bold">Admin Panel</h1>
+        <div class="flex items-center space-x-4">
+            <a href="main.html" class="text-sm underline hover:text-gray-200">Povratak na Scheduler</a>
+            <a href="users.html" class="text-sm underline hover:text-gray-200">Korisnici</a>
+            <span class="text-sm">Administrator</span>
+        </div>
+    </div>
+
+    <!-- Content Wrapper -->
+    <div class="bg-white rounded-2xl shadow-lg w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 overflow-hidden mt-16">
+        <!-- Calendar Side -->
+        <div class="p-6 border-r flex flex-col items-center justify-center">
+            <h2 class="text-xl font-bold mb-4 text-center">Izaberi datum</h2>
+            <div id="datepicker" class="flex justify-center"></div>
+        </div>
+
+        <!-- Time Slots Side -->
+        <div class="p-6">
+            <!-- Expand/Collapse Header -->
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold">Onemogući selektovanje termina</h2>
+                <button id="toggle-time-slots" class="text-blue-500 underline md:hidden">
+                    Prikaži
+                </button>
+            </div>
+
+            <!-- Time Slots Side (skriven na mobilnim uređajima) -->
+            <div id="time-slots-container" class="md:block hidden">
+                <!-- Izbor dana u nedelji kao grid -->
+                <label class="text-sm font-medium text-gray-700">Neradni dani</label>
+                <div class="grid grid-cols-7 gap-2 mb-4">
+                    <button class="day-button bg-gray-200 text-gray-700 py-1 rounded">Pon</button>
+                    <button class="day-button bg-gray-200 text-gray-700 py-1 rounded">Uto</button>
+                    <button class="day-button bg-gray-200 text-gray-700 py-1 rounded">Sre</button>
+                    <button class="day-button bg-gray-200 text-gray-700 py-1 rounded">Čet</button>
+                    <button class="day-button bg-gray-200 text-gray-700 py-1 rounded">Pet</button>
+                    <button class="day-button bg-gray-200 text-gray-700 py-1 rounded">Sub</button>
+                    <button class="day-button bg-gray-200 text-gray-700 py-1 rounded">Ned</button>
+                </div>
+
+                <!-- Toggler za onemogućavanje dana -->
+                <div class="flex items-center mb-4">
+                    <label for="disable-day" class="text-sm font-medium text-gray-700 mr-2">Onemogući ceo dan</label>
+                    <input type="checkbox" id="disable-day" class="toggle-checkbox w-5 h-5">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <button class="time-slot-1">09:00</button>
+                    <button class="time-slot-1">10:00</button>
+                    <button class="time-slot-1">11:00</button>
+                    <button class="time-slot-1">12:00</button>
+                    <button class="time-slot-1">13:00</button>
+                    <button class="time-slot-1">14:00</button>
+                    <button class="time-slot-1">15:00</button>
+                    <button class="time-slot-1">16:00</button>
+                    <button class="time-slot-1">17:00</button>
+                    <button class="time-slot-1">18:00</button>
+                    <button class="time-slot-1">19:00</button>
+                    <button class="time-slot-1">20:00</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabela za prikaz korisnika -->
+    <div class="bg-white rounded-2xl shadow-lg w-full max-w-4xl mt-8 p-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Lista korisnika za odabrani datum</h2>
+            <button id="add-user-btn"
+                class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none">
+                +
+            </button>
+        </div>
+        <table class="w-full border-collapse border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="border border-gray-300 px-4 py-2 text-left">Vreme</th>
+                    <th colspan="2" class="border border-gray-300 px-4 py-2 text-left">Ime i Prezime</th>
+                </tr>
+            </thead>
+            <tbody id="user-list">
+                <!-- Dinamički generisani podaci -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+    <div id="add-user-modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-lg shadow-lg w-96 p-6">
+            <h3 class="text-lg font-bold mb-4">Dodaj korisnika</h3>
+            <div class="mb-4">
+                <label for="user-dropdown" class="block text-sm font-medium text-gray-700">Izaberi korisnika</label>
+                <select id="user-dropdown"
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    <option value="Marko Markovic">Marko Markovic</option>
+                    <option value="Jovana Jovanovic">Jovana Jovanovic</option>
+                    <option value="Petar Petrovic">Petar Petrovic</option>
+                    <option value="Ana Anic">Ana Anic</option>
+                </select>
+            </div>
+            <div class="grid grid-cols-3 gap-2 mb-4">
+                <button class="time-slot bg-gray-200 text-gray-700 px-2 py-1 rounded">09:00</button>
+                <button class="time-slot bg-gray-200 text-gray-700 px-2 py-1 rounded">10:00</button>
+                <button class="time-slot bg-gray-200 text-gray-700 px-2 py-1 rounded">11:00</button>
+                <button class="time-slot bg-gray-200 text-gray-700 px-2 py-1 rounded">12:00</button>
+                <button class="time-slot bg-gray-200 text-gray-700 px-2 py-1 rounded">13:00</button>
+                <button class="time-slot bg-gray-200 text-gray-700 px-2 py-1 rounded">14:00</button>
+                <button class="time-slot bg-gray-200 text-gray-700 px-2 py-1 rounded">15:00</button>
+                <button class="time-slot bg-gray-200 text-gray-700 px-2 py-1 rounded">16:00</button>
+                <button class="time-slot bg-gray-200 text-gray-700 px-2 py-1 rounded">17:00</button>
+                <button class="time-slot bg-gray-200 text-gray-700 px-2 py-1 rounded">18:00</button>
+                <button class="time-slot bg-gray-200 text-gray-700 px-2 py-1 rounded">19:00</button>
+                <button class="time-slot bg-gray-200 text-gray-700 px-2 py-1 rounded">19:00</button>
+            </div>
+            <div class="flex justify-end">
+                <button id="close-modal-btn"
+                    class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none mr-2">
+                    Zatvori
+                </button>
+                <button id="save-user-btn"
+                    class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none">
+                    Sačuvaj
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/sr.js"></script>
+    <script>
+        // Inicijalizacija kalendara
+        flatpickr("#datepicker", {
+            inline: true,
+            dateFormat: "Y-m-d",
+            minDate: "today",
+            locale: "sr",
+            mode: "range",
+            onChange: function (selectedDates, dateStr) {
+                // Kada se datum promeni, ažuriraj tabelu
+                updateUserList(dateStr);
+            }
+        });
+
+        const buttons = document.querySelectorAll('.time-slot-1');
+        buttons.forEach(btn => {
+            btn.classList.add('bg-gray-200', 'text-gray-700', 'rounded-xl', 'py-4', 'font-bold', 'transition');
+            btn.addEventListener('click', () => {
+                console.log("Kliknuto na:", btn.textContent);
+                if (btn.classList.contains('bg-gray-200')) {
+                    btn.classList.remove('bg-gray-200', 'text-gray-700');
+                    btn.classList.add('bg-red-500', 'text-white');
+                } else {
+                    btn.classList.remove('bg-red-500', 'text-white');
+                    btn.classList.add('bg-gray-200', 'text-gray-700');
+                }
+            });
+        });
+
+        // Toggler za onemogućavanje dana
+        const disableDayCheckbox = document.getElementById("disable-day");
+        const timeSlots = document.querySelectorAll(".time-slot-1");
+
+        disableDayCheckbox.addEventListener("change", () => {
+            if (disableDayCheckbox.checked) {
+                // Onemogući sve vremenske slotove
+                timeSlots.forEach(slot => {
+                    slot.setAttribute("disabled", "true");
+                    slot.classList.add("bg-gray-300", "text-gray-500", "cursor-not-allowed");
+                    slot.classList.remove("bg-gray-200", "text-gray-700");
+                });
+            } else {
+                // Omogući sve vremenske slotove
+                timeSlots.forEach(slot => {
+                    slot.removeAttribute("disabled");
+                    slot.classList.remove("bg-gray-300", "text-gray-500", "cursor-not-allowed");
+                    slot.classList.add("bg-gray-200", "text-gray-700");
+                });
+            }
+        });
+
+        // Funkcija za ažuriranje liste korisnika
+        function updateUserList(date) {
+            const users = [
+                { name: "Marko Markovic", time: "09:00" },
+                { name: "Jovana Jovanovic", time: "10:00" },
+                { name: "Petar Petrovic", time: "11:00" },
+                { name: "Ana Anic", time: "12:00" },
+            ];
+
+            const tbody = document.getElementById("user-list");
+            tbody.innerHTML = ""; // Očisti prethodne podatke
+
+            users.forEach((user, index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                <td class="border border-gray-300 px-4 py-2">${user.time}</td>
+                <td class="border border-gray-300 px-4 py-2 flex justify-between items-center">
+                    <span>${user.name}</span>
+                    <button class="delete-btn bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 ml-auto" data-index="${index}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M10 3h4a1 1 0 011 1v1H9V4a1 1 0 011-1z" />
+                        </svg>
+                    </button>
+                </td>
+            `;
+                tbody.appendChild(row);
+            });
+
+            // Dodaj event listener za brisanje
+            const deleteButtons = document.querySelectorAll(".delete-btn");
+            deleteButtons.forEach(button => {
+                button.addEventListener("click", (e) => {
+                    const rowIndex = e.target.closest("tr").rowIndex - 1; // Prilagođeno za indeksiranje
+                    tbody.deleteRow(rowIndex);
+                });
+            });
+        }
+
+        // Modal funkcionalnost
+        const addUserBtn = document.getElementById("add-user-btn");
+        const addUserModal = document.getElementById("add-user-modal");
+        const closeModalBtn = document.getElementById("close-modal-btn");
+        const saveUserBtn = document.getElementById("save-user-btn");
+        const userDropdown = document.getElementById("user-dropdown");
+
+        addUserBtn.addEventListener("click", () => {
+            addUserModal.classList.remove("hidden");
+
+            // Selektuj vremenske slotove unutar modala kada se modal otvori
+            const modalTimeSlots = document.querySelectorAll("#add-user-modal .time-slot");
+
+            // Dodaj event listener za svaki vremenski slot
+            modalTimeSlots.forEach(slot => {
+                slot.addEventListener("click", () => {
+                    console.log("Kliknuto na:", slot.textContent);
+                    if (slot.classList.contains("bg-gray-200")) {
+                        slot.classList.remove("bg-gray-200", "text-gray-700");
+                        slot.classList.add("bg-blue-500", "text-white");
+                    } else {
+                        slot.classList.remove("bg-blue-500", "text-white");
+                        slot.classList.add("bg-gray-200", "text-gray-700");
+                    }
+                });
+            });
+        });
+
+        closeModalBtn.addEventListener("click", () => {
+            addUserModal.classList.add("hidden");
+        });
+
+        saveUserBtn.addEventListener("click", () => {
+            const modalTimeSlots = document.querySelectorAll("#add-user-modal .time-slot");
+            const selectedUser = userDropdown.value;
+            const selectedTimeSlots = Array.from(modalTimeSlots)
+                .filter(slot => slot.classList.contains("bg-blue-500"))
+                .map(slot => slot.textContent);
+
+            console.log("Selected User:", selectedUser);
+            console.log("Selected Time Slots:", selectedTimeSlots);
+
+            if (selectedUser && selectedTimeSlots.length > 0) {
+                const tbody = document.getElementById("user-list");
+                selectedTimeSlots.forEach(time => {
+                    const row = document.createElement("tr");
+                    row.innerHTML = `
+                        <td class="border border-gray-300 px-4 py-2">${time}</td>
+                        <td class="border border-gray-300 px-4 py-2">${selectedUser}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } else {
+                console.log("Nije izabran korisnik ili termini.");
+            }
+
+            // Zatvori modal
+            addUserModal.classList.add("hidden");
+        });
+
+        // Dodavanje funkcionalnosti za selektovanje više dana
+        const dayButtons = document.querySelectorAll(".day-button");
+
+        dayButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                if (button.classList.contains("bg-gray-200")) {
+                    button.classList.remove("bg-gray-200", "text-gray-700");
+                    button.classList.add("bg-blue-500", "text-white");
+                } else {
+                    button.classList.remove("bg-blue-500", "text-white");
+                    button.classList.add("bg-gray-200", "text-gray-700");
+                }
+            });
+        });
+
+        // Dodavanje funkcionalnosti za expand/collapse
+        const toggleButton = document.getElementById("toggle-time-slots");
+        const timeSlotsContainer = document.getElementById("time-slots-container");
+
+        toggleButton.addEventListener("click", () => {
+            if (timeSlotsContainer.classList.contains("hidden")) {
+                timeSlotsContainer.classList.remove("hidden");
+                toggleButton.textContent = "Sakrij";
+            } else {
+                timeSlotsContainer.classList.add("hidden");
+                toggleButton.textContent = "Prikaži";
+            }
+        });
+
+    </script>
+</body>
+
+</html>

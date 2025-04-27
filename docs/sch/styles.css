@@ -1,0 +1,61 @@
+.flatpickr-calendar.inline {
+  display: flex;
+  flex-direction: column;
+  position: static;
+  width: 100%;
+  box-shadow: none;
+  align-items: center;
+}
+
+.flatpickr-months {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.flatpickr-month {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.flatpickr-current-month {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  padding: 8px;
+  font-size: 1.25rem;
+  color: #4B5563;
+}
+
+.flatpickr-prev-month {
+  left: 10px;
+}
+
+.flatpickr-next-month {
+  right: 10px;
+}
+
+/* Stil za disabled dugmad */
+button[disabled] {
+  background-color: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+table {
+  border-collapse: collapse;
+}

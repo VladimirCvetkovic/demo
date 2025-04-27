@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="sr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registracija</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-6">
+    <!-- Register Form Wrapper -->
+    <div class="bg-white rounded-2xl shadow-lg w-full max-w-md p-6">
+        <h1 class="text-2xl font-bold text-center mb-6">Registracija</h1>
+        <form action="main.html" method="GET" class="space-y-4">
+            <!-- Full Name Input -->
+            <div>
+                <label for="full-name" class="block text-sm font-medium text-gray-700">Ime i Prezime</label>
+                <input type="text" id="full-name" name="full-name" required
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <!-- Email Input -->
+            <div>
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" name="email" required
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <!-- Password Input -->
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-700">Lozinka</label>
+                <input type="password" id="password" name="password" required
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Confirm Password Input -->
+            <div>
+                <label for="confirm-password" class="block text-sm font-medium text-gray-700">Potvrdite Lozinku</label>
+                <input type="password" id="confirm-password" name="confirm-password" required
+                    class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+            </div>
+
+            <!-- Checkbox za prikaz lozinke -->
+            <div class="mt-2">
+                <input type="checkbox" id="show-password" class="mr-2">
+                <label for="show-password" class="text-sm text-gray-700">Prikaži lozinke</label>
+            </div>
+
+            <!-- Submit Button -->
+            <div>
+                <button type="submit"
+                    class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Registruj se
+                </button>
+            </div>
+        </form>
+        <!-- Link to Login -->
+        <div class="mt-4 text-center">
+            <a href="index.html" class="text-sm text-blue-500 hover:underline">Već imate nalog? Prijavite se</a>
+        </div>
+    </div>
+    <script>
+        // Funkcionalnost za prikazivanje lozinke
+        const passwordInput = document.getElementById("password");
+        const confirmPasswordInput = document.getElementById("confirm-password");
+        const showPasswordCheckbox = document.getElementById("show-password");
+
+        showPasswordCheckbox.addEventListener("change", () => {
+            const type = showPasswordCheckbox.checked ? "text" : "password";
+            passwordInput.type = type;
+            confirmPasswordInput.type = type;
+        });
+    </script>
+</body>
+
+</html>
